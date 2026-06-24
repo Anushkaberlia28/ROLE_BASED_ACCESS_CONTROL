@@ -5,18 +5,22 @@
   "main": "src/app.js",
   "scripts": {
     "dev": "nodemon src/app.js",
-    "db:migrate": "node src/migrations/migrate.js",
+    "db:generate": "drizzle-kit generate --config=drizzle.config.js",
+    "db:migrate": "drizzle-kit migrate --config=drizzle.config.js",
+    "db:push": "drizzle-kit push --config=drizzle.config.js",
     "db:seed-data": "node src/seeders/seedCfo.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.22.0"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.31.10",
     "nodemon": "^3.1.14"
   }
 }
