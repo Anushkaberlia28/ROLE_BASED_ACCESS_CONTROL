@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 
 const authRoutes = require("./routes/authRoutes");
 const roleRoutes = require("./routes/roleRoutes");
+const employeeRoutes = require("./routes/employeeRoutes");
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ app.use("/rest/onboardings", authRoutes);
 
 // role routes
 app.use("/rest/roles", roleRoutes);
+
+app.use("/rest/employees", employeeRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
