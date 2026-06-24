@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authRoutes");
 const roleRoutes = require("./routes/roleRoutes");
 const employeeRoutes = require("./routes/employeeRoutes");
+const reimbursementRoutes = require("./routes/reimbursementRoutes");
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use("/rest/onboardings", authRoutes);
 app.use("/rest/roles", roleRoutes);
 
 app.use("/rest/employees", employeeRoutes);
+app.use("/rest/reimbursements", reimbursementRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
