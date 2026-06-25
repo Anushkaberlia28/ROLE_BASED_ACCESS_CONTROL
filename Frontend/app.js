@@ -17,6 +17,7 @@ const loginMsg = qs('#login-msg');
 const authArea = qs('#auth-area');
 const appArea = qs('#app-area');
 const userInfo = qs('#user-info');
+const userRole = qs('#user-role');
 const btnLogout = qs('#btn-logout');
 
 // Reimbursement elements
@@ -40,12 +41,14 @@ const setLoggedIn = (user) => {
     if (user) {
         authArea.classList.add('hidden');
         appArea.classList.remove('hidden');
-        userInfo.textContent = `${user.name} (${user.email}) — ${user.role}`;
+        userInfo.textContent = `${user.name} (${user.email})`;
+        if (userRole) userRole.textContent = user.role;
         loadReimbursements();
     } else {
         authArea.classList.remove('hidden');
         appArea.classList.add('hidden');
         userInfo.textContent = '';
+        if (userRole) userRole.textContent = '';
     }
 };
 

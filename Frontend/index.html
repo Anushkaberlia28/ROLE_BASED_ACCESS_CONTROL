@@ -5,20 +5,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>RBAC - Basic Frontend</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-    <div class="container">
-        <h1>Role-Based Reimbursements (Basic UI)</h1>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">RBAC</div>
+            <nav class="nav">Role-Based Reimbursements</nav>
+        </div>
+    </header>
 
-        <div id="auth-area">
+    <main class="container main-content">
+        <h1 class="sr-only">Role-Based Reimbursements (Basic UI)</h1>
+
+        <section id="auth-area" class="grid-auth">
             <div id="register-form" class="card">
                 <h2>Register</h2>
                 <input id="reg-name" placeholder="Name" />
                 <input id="reg-email" placeholder="Email" />
                 <input id="reg-password" placeholder="Password" type="password" />
-                <button id="btn-register">Register</button>
+                <button id="btn-register" class="btn-primary">Register</button>
                 <div id="reg-msg" class="msg"></div>
             </div>
 
@@ -26,19 +34,20 @@
                 <h2>Login</h2>
                 <input id="login-email" placeholder="Email" />
                 <input id="login-password" placeholder="Password" type="password" />
-                <button id="btn-login">Login</button>
+                <button id="btn-login" class="btn-primary">Login</button>
                 <div id="login-msg" class="msg"></div>
             </div>
-        </div>
+        </section>
 
-        <div id="app-area" class="hidden">
+        <section id="app-area" class="hidden">
             <div class="card">
-                <div class="row">
-                    <div>
-                        <strong id="user-info"></strong>
+                <div class="row user-row">
+                    <div class="user-panel">
+                        <div id="user-info" class="user-name"></div>
+                        <div id="user-role" class="role-badge"></div>
                     </div>
                     <div>
-                        <button id="btn-logout">Logout</button>
+                        <button id="btn-logout" class="btn-ghost">Logout</button>
                     </div>
                 </div>
             </div>
@@ -48,7 +57,7 @@
                 <input id="rb-title" placeholder="Title" />
                 <input id="rb-amount" placeholder="Amount" type="number" />
                 <textarea id="rb-desc" placeholder="Description"></textarea>
-                <button id="btn-create-rb">Create</button>
+                <button id="btn-create-rb" class="btn-primary">Create</button>
                 <div id="rb-msg" class="msg"></div>
             </div>
 
@@ -56,9 +65,9 @@
                 <h2>Reimbursements</h2>
                 <div id="rb-list">Loading...</div>
             </div>
-        </div>
+        </section>
 
-    </div>
+    </main>
     <script src="app.js"></script>
 </body>
 
