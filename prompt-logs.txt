@@ -1,0 +1,19 @@
+1. Built RBAC Reimbursement Backend using Node.js, Express, Supabase PostgreSQL, and Drizzle ORM.
+
+2. Created project structure using routes, controllers, services, middlewares, utils, seeders, and db schema files.
+
+3. Designed database schema for users, employee-manager assignments, and reimbursements.
+
+4. Implemented onboarding module with register, login, and logout APIs under /rest/onboardings.
+
+5. Added JWT-based cookie authentication so protected APIs can identify the logged-in user through req.user.
+
+6. Built role assignment module where only CFO can assign roles like EMP, RM, APE, and CFO.
+
+7. Implemented employee assignment flow so CFO can assign an employee to a reporting manager.
+
+8. Developed reimbursement creation API where only EMP can raise a reimbursement with default PENDING status.
+
+9. Implemented reimbursement approval flow for RM, APE, and CFO according to role-based approval hierarchy.
+
+10. Connected project with Supabase using Drizzle, pushed schema to database, and seeded default CFO credentials.
