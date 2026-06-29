@@ -30,10 +30,41 @@ const rbList = qs('#rb-list');
 
 let currentUser = null;
 
-// Helpers
 const showMsg = (el, text, isError = true) => {
     el.textContent = text || '';
     el.style.color = isError ? '#ef4444' : '#10b981';
+};
+
+const requestJson = async (path, options = {}) => {
+    const res = await fetch(`${API_BASE}${path}`, {
+        headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+        credentials: 'include',
+        ...options,
+    });
+
+    let payload = null;
+    const contentType = res.headers.get('content-type') || '';
+
+    if (contentType.includes('application/json')) {
+        payload = await res.json().catch(() => null);
+    } else {
+        payload = await res.text().catch(() => null);
+    }
+
+    if (!res.ok) {
+        const message = payload?.message || payload || `Request failed with ${res.status}`;
+        throw new Error(message);
+    }
+
+    return payload;
+};
+
+const extractItems = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.data)) return payload.data;
+    if (Array.isArray(payload?.data?.reimbursements)) return payload.data.reimbursements;
+    if (Array.isArray(payload?.reimbursements)) return payload.reimbursements;
+    return [];
 };
 
 const setLoggedIn = (user) => {
@@ -52,19 +83,18 @@ const setLoggedIn = (user) => {
     }
 };
 
-// Register
 btnRegister.addEventListener('click', async () => {
     btnRegister.disabled = true;
     showMsg(regMsg, '');
     try {
-        const res = await fetch(`${API_BASE}/onboardings/register`, {
+        await requestJson('/onboardings/register', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: regName.value, email: regEmail.value, password: regPassword.value }),
-            credentials: 'include',
+            body: JSON.stringify({
+                name: regName.value,
+                email: regEmail.value,
+                password: regPassword.value,
+            }),
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Register failed');
         showMsg(regMsg, 'Registered successfully — please login', false);
         regName.value = regEmail.value = regPassword.value = '';
     } catch (err) {
@@ -74,20 +104,19 @@ btnRegister.addEventListener('click', async () => {
     }
 });
 
-// Login
 btnLogin.addEventListener('click', async () => {
     btnLogin.disabled = true;
     showMsg(loginMsg, '');
     try {
-        const res = await fetch(`${API_BASE}/onboardings/login`, {
+        const data = await requestJson('/onboardings/login', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: loginEmail.value, password: loginPassword.value }),
-            credentials: 'include',
+            body: JSON.stringify({
+                email: loginEmail.value,
+                password: loginPassword.value,
+            }),
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Login failed');
-        const user = data.data.user;
+        const user = data?.data?.user;
+        if (!user) throw new Error('Login response was invalid');
         setLoggedIn(user);
         loginEmail.value = loginPassword.value = '';
     } catch (err) {
@@ -99,27 +128,28 @@ btnLogin.addEventListener('click', async () => {
 
 btnLogout.addEventListener('click', async () => {
     try {
-        await fetch(`${API_BASE}/onboardings/logout`, { method: 'POST', credentials: 'include' });
+        await requestJson('/onboardings/logout', { method: 'POST' });
     } catch (e) {
         // ignore
     }
     setLoggedIn(null);
 });
 
-// Create reimbursement
 btnCreateRb.addEventListener('click', async () => {
     btnCreateRb.disabled = true;
     showMsg(rbMsg, '');
     try {
-        const payload = { title: rbTitle.value, description: rbDesc.value, amount: Number(rbAmount.value) };
-        const res = await fetch(`${API_BASE}/reimbursements`, {
+        const payload = {
+            title: rbTitle.value,
+            description: rbDesc.value,
+            amount: Number(rbAmount.value),
+        };
+
+        await requestJson('/reimbursements', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
-            credentials: 'include',
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Create failed');
+
         showMsg(rbMsg, 'Created successfully', false);
         rbTitle.value = rbDesc.value = rbAmount.value = '';
         loadReimbursements();
@@ -130,16 +160,11 @@ btnCreateRb.addEventListener('click', async () => {
     }
 });
 
-// Load reimbursements
 const loadReimbursements = async () => {
     rbList.innerHTML = 'Loading...';
     try {
-        const res = await fetch(`${API_BASE}/reimbursements`, { credentials: 'include' });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Failed to load');
-        const rows = data;
-        // backend returns { status, data } usually — handle both
-        const items = Array.isArray(rows) ? rows : data.data || data;
+        const data = await requestJson('/reimbursements', { method: 'GET' });
+        const items = extractItems(data);
         renderReimbursements(items);
     } catch (err) {
         rbList.innerHTML = `<div class="msg">${err.message || String(err)}</div>`;
@@ -172,15 +197,4 @@ function escapeHtml(s) {
         .replace(/>/g, '&gt;');
 }
 
-// On load: show auth area
 setLoggedIn(null);
-
-// Try to detect logged-in user by calling a lightweight endpoint: / (root) or re-fetch reimbursements and check error
-(async () => {
-    try {
-        const res = await fetch(`${API_BASE}/onboardings/login`, { method: 'GET', credentials: 'include' });
-        // this backend doesn't expose GET /login; skip
-    } catch (e) {
-        // ignore
-    }
-})();

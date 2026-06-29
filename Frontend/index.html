@@ -4,25 +4,55 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>RBAC - Basic Frontend</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>RBAC Reimbursements</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
     <header class="site-header">
         <div class="container header-inner">
-            <div class="brand">RBAC</div>
-            <nav class="nav">Role-Based Reimbursements</nav>
+            <div>
+                <div class="brand">RBAC</div>
+                <p class="brand-subtitle">Role-based reimbursements portal</p>
+            </div>
+            <div class="pill-chip">Secure • Fast • Elegant</div>
         </div>
     </header>
 
     <main class="container main-content">
-        <h1 class="sr-only">Role-Based Reimbursements (Basic UI)</h1>
+        <section class="hero card">
+            <div class="hero-copy">
+                <span class="eyebrow">Modern workflow</span>
+                <h1>Manage reimbursements with clarity and control.</h1>
+                <p>Create requests, track progress, and keep approvals moving through a polished experience built for
+                    every role.</p>
+                <div class="hero-stats">
+                    <div>
+                        <strong>4 roles</strong>
+                        <span>EMP · RM · APE · CFO</span>
+                    </div>
+                    <div>
+                        <strong>Live status</strong>
+                        <span>Approval timeline at a glance</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="orbit-card">
+                    <div class="orbital-dot"></div>
+                    <div class="orbit-content">
+                        <h3>Today’s focus</h3>
+                        <p>Fast submissions, faster review, and transparent updates.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <section id="auth-area" class="grid-auth">
-            <div id="register-form" class="card">
-                <h2>Register</h2>
+            <div id="register-form" class="card form-card">
+                <h2>Create account</h2>
+                <p class="subtext">Join the reimbursement flow as an employee.</p>
                 <input id="reg-name" placeholder="Name" />
                 <input id="reg-email" placeholder="Email" />
                 <input id="reg-password" placeholder="Password" type="password" />
@@ -30,8 +60,9 @@
                 <div id="reg-msg" class="msg"></div>
             </div>
 
-            <div id="login-form" class="card">
-                <h2>Login</h2>
+            <div id="login-form" class="card form-card">
+                <h2>Welcome back</h2>
+                <p class="subtext">Sign in to continue your requests.</p>
                 <input id="login-email" placeholder="Email" />
                 <input id="login-password" placeholder="Password" type="password" />
                 <button id="btn-login" class="btn-primary">Login</button>
@@ -53,7 +84,8 @@
             </div>
 
             <div class="card">
-                <h2>Create Reimbursement (EMP)</h2>
+                <h2>Create reimbursement</h2>
+                <p class="subtext">Submit a new claim for review.</p>
                 <input id="rb-title" placeholder="Title" />
                 <input id="rb-amount" placeholder="Amount" type="number" />
                 <textarea id="rb-desc" placeholder="Description"></textarea>
@@ -62,12 +94,12 @@
             </div>
 
             <div class="card">
-                <h2>Reimbursements</h2>
+                <h2>Your reimbursements</h2>
                 <div id="rb-list">Loading...</div>
             </div>
         </section>
-
     </main>
+
     <script src="app.js"></script>
 </body>
 
